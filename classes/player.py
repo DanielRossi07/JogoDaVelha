@@ -1,56 +1,54 @@
 from piece import Piece
 from pieceType import PieceType
-from random import randint
+import random
 
 
 class Player:
-    pieces: list[Piece]
-    current_piece: Piece
-    is_computer: bool = False
-
     def __init__(self, name: str, piece_type: str):
         self.name = name
         self.pieces = []
         self.pieceType = PieceType(piece_type)
+        self.current_piece = None
+        self.is_computer = False
 
     def play(self):
-        row = None
-        col = None
-
-        while not row:
-            row = input(f"{self.name}, qual a linha da sua próxima jogada? ")
-            row = self.validate_input(row)
-
-        while not col:
-            col = input(f"{self.name}, qual a coluna da sua próxima jogada? ")
-            col = self.validate_input(col)
-
-        print("\n\n")
+        row, col = self.get_valid_move()
         self.current_piece = Piece(self.pieceType, row - 1, col - 1)
 
+    def get_valid_move(self) -> tuple[int, int]:
+        while True:
+            row = input(f"{self.name}, qual a linha da sua próxima jogada? ")
+            row = self.validate_input(row)
+            if row:
+                break
+
+        while True:
+            col = input(f"{self.name}, qual a coluna da sua próxima jogada? ")
+            col = self.validate_input(col)
+            if col:
+                break
+
+        return row, col
+
     @staticmethod
-    def validate_input(_input: str) -> int or None:
+    def validate_input(_input: str) -> int:
         try:
             _input = int(_input)
 
-            if _input > 3 or _input < 1:
-                print("Precisa ser um número de 1 a 3")
-                return None
-
-            return _input
-        except:
-            print("Precisa ser um número")
-            return None
+            if 1 <= _input <= 3:
+                return _input
+            else:
+                print("As coordenadas precisam estar entre 1 e 3.")
+        except ValueError:
+            print("As coordenadas precisam ser números inteiros.")
 
 
 class ComputerPlayer(Player):
-    is_computer: bool = True
-
     def __init__(self, name: str, piece_type: str):
         super().__init__(name, piece_type)
+        self.is_computer = True
 
     def play(self):
-        row = randint(0, 2)
-        col = randint(0, 2)
-
-        self.current_piece = Piece(self.pieceType, row, col)
+        row = random.randint(1, 3)
+        col = random.randint(1, 3)
+        self.current_piece = Piece(self.pieceType, row - 1, col - 1)
