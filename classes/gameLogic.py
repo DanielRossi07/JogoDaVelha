@@ -1,7 +1,6 @@
 from board import Board
 from player import Player
 from random import randint
-from piece import Piece
 
 
 class GameLogic:
@@ -59,11 +58,11 @@ class GameLogic:
         self.verify_if_tie()
 
     def verify_win_by_rows(self):
-        for row in self.game_board.board:
+        for row in range(len(self.game_board.board)):
             last_piece = None
             row_winner = True
-            for col in row:
-                piece = col[0]
+            for col in range(len(self.game_board.board)):
+                piece = self.game_board.get_piece_on_position(row, col)
                 if self.game_board.is_default_piece(piece):
                     row_winner = False
                     break
@@ -84,7 +83,7 @@ class GameLogic:
             last_piece = None
             col_winner = True
             for row in range(len(self.game_board.board)):
-                piece = self.game_board.board[row][col][0]
+                piece = self.game_board.get_piece_on_position(row, col)
                 if self.game_board.is_default_piece(piece):
                     col_winner = False
                     break
@@ -101,21 +100,22 @@ class GameLogic:
                 self.winner = self.current_player
 
     def verify_win_by_diagonal(self):
-        board = self.game_board.board
-        first_row = board[0]
-        piece_on_middle_square = board[1][1][0]
-        last_row = board[2]
+        left_top_piece = self.game_board.get_piece_on_position(0, 0)
+        right_top_piece = self.game_board.get_piece_on_position(0, 2)
+        left_bottom_piece = self.game_board.get_piece_on_position(2, 0)
+        right_bottom_piece = self.game_board.get_piece_on_position(2, 2)
+        mid_piece = self.game_board.get_piece_on_position(1, 1)
 
-        if self.game_board.is_default_piece(piece_on_middle_square):
+        if self.game_board.is_default_piece(mid_piece):
             return
 
         # Verify from top left to right bottom
-        if first_row[0][0].type == last_row[2][0].type and first_row[0][0].type == piece_on_middle_square.type:
+        if left_top_piece.type == right_bottom_piece.type and left_top_piece.type == mid_piece.type:
             self.winner = self.current_player
             return
 
         # Verify from top right to left bottom
-        if first_row[2][0].type == last_row[0][0].type and first_row[2][0].type == piece_on_middle_square.type:
+        if right_top_piece.type == left_bottom_piece.type and right_top_piece.type == mid_piece.type:
             self.winner = self.current_player
             return
 

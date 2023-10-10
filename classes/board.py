@@ -41,6 +41,12 @@ class Board:
             return True
         return False
 
+    def get_piece_on_position(self, position: BoardPosition):
+        return self.get_piece_on_position(position.row, position.col)
+
+    def get_piece_on_position(self, row: int, col: int):
+        return self.__board[row][col][0]
+
     @property
     def board(self):
         return self.__board

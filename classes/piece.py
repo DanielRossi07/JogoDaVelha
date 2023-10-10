@@ -15,6 +15,3 @@ class Piece:
     def type(self):
         return self.__type
 
-    def update_postion(self, row: int, col: int):
-        self.__position.row = row
-        self.__position.col = col
