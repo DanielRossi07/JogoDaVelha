@@ -101,7 +101,23 @@ class GameLogic:
                 self.winner = self.current_player
 
     def verify_win_by_diagonal(self):
-        pass
+        board = self.game_board.board
+        first_row = board[0]
+        piece_on_middle_square = board[1][1][0]
+        last_row = board[2]
+
+        if self.game_board.is_default_piece(piece_on_middle_square):
+            return
+
+        # Verify from top left to right bottom
+        if first_row[0][0].type == last_row[2][0].type and first_row[0][0].type == piece_on_middle_square.type:
+            self.winner = self.current_player
+            return
+
+        # Verify from top right to left bottom
+        if first_row[2][0].type == last_row[0][0].type and first_row[2][0].type == piece_on_middle_square.type:
+            self.winner = self.current_player
+            return
 
     def verify_if_tie(self):
         pass
