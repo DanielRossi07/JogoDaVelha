@@ -9,26 +9,20 @@ class Board:
 
     def __init__(self):
         self.__pieces_on_board = []
-        self.__board = [[], [], []], \
-                       [[], [], []], \
-                       [[], [], []],
-        self.init_board()
-
-    def init_board(self):
-        for row in range(len(self.__board)):
-            for col in range(len(self.__board[row])):
-                default_piece = Piece(PieceType.d, row, col)
-                self.__board[row][col].append(default_piece)
+        self.__board = [
+            [Piece(PieceType.d, row, col) for col in range(3)]
+            for row in range(3)
+        ]
 
     def draw_board(self):
         print("###################")
         for row in self.__board:
-            print(f"{row[0][0].type.value} {row[1][0].type.value} {row[2][0].type.value}")
+            print(" ".join(piece.type.value for piece in row))
         print("###################")
 
     def update_board(self):
         for piece in self.__pieces_on_board:
-            self.__board[piece.position.row][piece.position.col][0] = piece
+            self.__board[piece.position.row][piece.position.col] = piece
         self.draw_board()
 
     def add_piece_to_board(self, piece: Piece):
@@ -36,7 +30,7 @@ class Board:
         self.update_board()
 
     def is_default_piece_on_position(self, position: BoardPosition):
-        piece = self.__board[position.row][position.col][0]
+        piece = self.__board[position.row][position.col]
         if piece.type == PieceType.d:
             return True
         return False
@@ -45,7 +39,7 @@ class Board:
         return self.get_piece_on_position(position.row, position.col)
 
     def get_piece_on_position(self, row: int, col: int):
-        return self.__board[row][col][0]
+        return self.__board[row][col]
 
     @property
     def board(self):
