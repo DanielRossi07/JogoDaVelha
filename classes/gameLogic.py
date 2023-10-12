@@ -97,7 +97,8 @@ class GameLogic:
                 self.winner = self.current_player
 
     def verify_if_tie(self):
-        pass
+        if self.game_board.is_full:
+            self.tie = True
 
     def register_play(self):
         new_piece_position = self.current_player.current_piece.position

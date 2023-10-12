@@ -43,6 +43,12 @@ class Board:
         return self.board[row][col]
 
     @property
+    def is_full(self):
+        if len(self.__pieces_on_board) == 9:
+            return True
+        return False
+
+    @property
     def rows(self):
         return self.board
 
@@ -62,7 +68,6 @@ class Board:
             diagonals[0].append(self.get_piece_on_position(pos, pos))
             diagonals[1].append(self.get_piece_on_position(pos, 2 - pos))
         return diagonals
-
 
     @property
     def board(self):
