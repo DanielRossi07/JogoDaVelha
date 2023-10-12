@@ -11,36 +11,22 @@ class Player:
         self.current_piece = None
         self.is_computer = False
 
-    def play(self):
-        row, col = self.get_valid_move()
-        self.current_piece = Piece(self.pieceType, row - 1, col - 1)
-
-    def get_valid_move(self) -> tuple[int, int]:
-        while True:
-            row = input(f"{self.name}, qual a linha da sua próxima jogada? ")
-            row = self.validate_input(row)
-            if row:
-                break
-
-        while True:
-            col = input(f"{self.name}, qual a coluna da sua próxima jogada? ")
-            col = self.validate_input(col)
-            if col:
-                break
-
-        return row, col
+    def make_a_move(self, row: int, col: int):
+        self.validate_input(row, col)
+        self.current_piece = Piece(self.pieceType, row, col)
 
     @staticmethod
-    def validate_input(_input: str) -> int:
+    def validate_input(row: int, col: int) -> bool:
         try:
-            _input = int(_input)
+            row = int(row)
+            col = int(col)
 
-            if 1 <= _input <= 3:
-                return _input
+            if 1 <= row <= 3 and 1 <= col <= 3:
+                return True
             else:
-                print("As coordenadas precisam estar entre 1 e 3.")
+                return False
         except ValueError:
-            print("As coordenadas precisam ser números inteiros.")
+            return False
 
 
 class ComputerPlayer(Player):

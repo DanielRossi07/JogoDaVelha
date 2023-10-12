@@ -15,16 +15,9 @@ class Board:
             for row in range(3)
         ]
 
-    def draw_board(self):
-        print("###################")
-        for row in self.board:
-            print(" ".join(piece.type.value for piece in row))
-        print("###################")
-
     def update_board(self):
         for piece in self.__pieces_on_board:
             self.board[piece.position.row][piece.position.col] = piece
-        self.draw_board()
 
     def add_piece_to_board(self, piece: Piece):
         self.__pieces_on_board.append(piece)
@@ -32,21 +25,16 @@ class Board:
 
     def is_default_piece_on_position(self, position: BoardPosition):
         piece = self.board[position.row][position.col]
-        if piece.type == PieceType.d:
-            return True
-        return False
+        return self.is_default_piece(piece)
+
+    def is_default_piece(self, piece: Piece):
+        return piece.type == PieceType.d
 
     def get_piece_on_position(self, position: BoardPosition):
         return self.get_piece_on_position(position.row, position.col)
 
     def get_piece_on_position(self, row: int, col: int):
         return self.board[row][col]
-
-    @property
-    def is_full(self):
-        if len(self.__pieces_on_board) == 9:
-            return True
-        return False
 
     @property
     def rows(self):
@@ -70,12 +58,9 @@ class Board:
         return diagonals
 
     @property
-    def board(self):
-        return self.__board
+    def is_full(self):
+        return len(self.__pieces_on_board) == self.board_size * self.board_size
 
-    @staticmethod
-    def is_default_piece(piece: Piece):
-        if piece.type == PieceType.d:
-            return True
-        else:
-            return False
+    @property
+    def board(self):
+        return copy.deepcopy(self.__board)

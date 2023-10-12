@@ -20,7 +20,7 @@ class GameLogic:
 
         while not stop:
             self.next_player()
-            self.current_player.play()
+            self.current_player.make_a_move()
 
             while not self.register_play():
                 if not self.current_player.is_computer:
