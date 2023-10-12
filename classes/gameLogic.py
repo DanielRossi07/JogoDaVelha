@@ -58,66 +58,43 @@ class GameLogic:
         self.verify_if_tie()
 
     def verify_win_by_rows(self):
-        for row in range(len(self.game_board.board)):
-            last_piece = None
-            row_winner = True
-            for col in range(len(self.game_board.board)):
-                piece = self.game_board.get_piece_on_position(row, col)
-                if self.game_board.is_default_piece(piece):
-                    row_winner = False
-                    break
+        rows = self.game_board.rows
 
-                if last_piece is None:
-                    last_piece = piece
-                    continue
+        for row in rows:
+            first_piece_of_row = row[0]
+            if self.game_board.is_default_piece(first_piece_of_row):
+                break
 
-                if piece.type != last_piece.type:
-                    row_winner = False
-                    break
+            row_winner = all(piece.type == first_piece_of_row.type for piece in row)
 
             if row_winner:
                 self.winner = self.current_player
 
     def verify_win_by_columns(self):
-        for col in range(len(self.game_board.board)):
-            last_piece = None
-            col_winner = True
-            for row in range(len(self.game_board.board)):
-                piece = self.game_board.get_piece_on_position(row, col)
-                if self.game_board.is_default_piece(piece):
-                    col_winner = False
-                    break
+        cols = self.game_board.columns
 
-                if last_piece is None:
-                    last_piece = piece
-                    continue
+        for col in cols:
+            first_piece_of_col = col[0]
+            if self.game_board.is_default_piece(first_piece_of_col):
+                break
 
-                if piece.type != last_piece.type:
-                    col_winner = False
-                    break
+            col_winner = all(piece.type == first_piece_of_col.type for piece in col)
 
             if col_winner:
                 self.winner = self.current_player
 
     def verify_win_by_diagonal(self):
-        left_top_piece = self.game_board.get_piece_on_position(0, 0)
-        right_top_piece = self.game_board.get_piece_on_position(0, 2)
-        left_bottom_piece = self.game_board.get_piece_on_position(2, 0)
-        right_bottom_piece = self.game_board.get_piece_on_position(2, 2)
-        mid_piece = self.game_board.get_piece_on_position(1, 1)
+        diagonals = self.game_board.diagonals
 
-        if self.game_board.is_default_piece(mid_piece):
-            return
+        for diagonal in diagonals:
+            first_piece_of_diagonals = diagonal[0]
+            if self.game_board.is_default_piece(first_piece_of_diagonals):
+                break
 
-        # Verify from top left to right bottom
-        if left_top_piece.type == right_bottom_piece.type and left_top_piece.type == mid_piece.type:
-            self.winner = self.current_player
-            return
+            diagonal_winner = all(piece.type == first_piece_of_diagonals.type for piece in diagonal)
 
-        # Verify from top right to left bottom
-        if right_top_piece.type == left_bottom_piece.type and right_top_piece.type == mid_piece.type:
-            self.winner = self.current_player
-            return
+            if diagonal_winner:
+                self.winner = self.current_player
 
     def verify_if_tie(self):
         pass

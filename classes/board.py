@@ -2,10 +2,11 @@ from piece import Piece
 from pieceType import PieceType
 from boardPosition import BoardPosition
 
+import copy
+
 
 class Board:
-    amount_of_rows = 3
-    amount_of_columns = 3
+    board_size = 3
 
     def __init__(self):
         self.__pieces_on_board = []
@@ -16,13 +17,13 @@ class Board:
 
     def draw_board(self):
         print("###################")
-        for row in self.__board:
+        for row in self.board:
             print(" ".join(piece.type.value for piece in row))
         print("###################")
 
     def update_board(self):
         for piece in self.__pieces_on_board:
-            self.__board[piece.position.row][piece.position.col] = piece
+            self.board[piece.position.row][piece.position.col] = piece
         self.draw_board()
 
     def add_piece_to_board(self, piece: Piece):
@@ -30,7 +31,7 @@ class Board:
         self.update_board()
 
     def is_default_piece_on_position(self, position: BoardPosition):
-        piece = self.__board[position.row][position.col]
+        piece = self.board[position.row][position.col]
         if piece.type == PieceType.d:
             return True
         return False
@@ -39,7 +40,29 @@ class Board:
         return self.get_piece_on_position(position.row, position.col)
 
     def get_piece_on_position(self, row: int, col: int):
-        return self.__board[row][col]
+        return self.board[row][col]
+
+    @property
+    def rows(self):
+        return self.board
+
+    @property
+    def columns(self):
+        cols = copy.deepcopy(self.__board)
+        for row in range(self.board_size):
+            for col in range(self.board_size):
+                cols[col][row] = self.board[row][col]
+        return cols
+
+    @property
+    def diagonals(self):
+        diagonals = [[], []]
+
+        for pos in range(self.board_size):
+            diagonals[0].append(self.get_piece_on_position(pos, pos))
+            diagonals[1].append(self.get_piece_on_position(pos, 2 - pos))
+        return diagonals
+
 
     @property
     def board(self):
